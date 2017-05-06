@@ -1,3 +1,6 @@
+var SUCCESS = 'success';
+var DANGER = 'danger';
+
 var newGameBtn = document.getElementById('js-newGameButton');
 
 newGameBtn.addEventListener('click', newGame);
@@ -23,6 +26,8 @@ var newGameElem = document.getElementById('js-newGameElement'),
     pickElem = document.getElementById('js-playerPickElement'),
     resultsElem = document.getElementById('js-resultsTableElement');
 	
+setGameElements();
+	
 function setGameElements() {
   switch(gameState) {
     case 'started':
@@ -36,7 +41,7 @@ function setGameElements() {
     default:
         newGameElem.style.display = 'block';
         pickElem.style.display = 'none';
-        resultsElem.style.display = 'none';
+		resultsElem.style.display = 'none';
   }
 };
 
@@ -50,6 +55,7 @@ function setGamePoints() {
 };
 	
 function newGame() {
+  hideMessage();
   player.name = prompt('Graczu, wpisz swoje imię', 'imię gracza');
   if (player.name) {
     player.score = computer.score = 0;
@@ -60,10 +66,6 @@ function newGame() {
     setGamePoints();
   }
 
-};
-
-function playerPick(playerPick) {
-    console.log(playerPick);
 };
 
 function getComputerPick() {
@@ -83,6 +85,8 @@ function checkRoundWinner(playerPick, computerPick) {
 
     if (playerPick == computerPick) {
         winnerIs = 'noone'; // remis
+		playerResultElem.innerHTML = "Remis";
+		computerResultElem.innerHTML = "Remis";
     } else if (
         (computerPick == 'rock' &&  playerPick == 'scissors') ||
         (computerPick == 'scissors' &&  playerPick == 'paper') ||
@@ -113,15 +117,36 @@ function playerPick(playerPick) {
 	checkRoundWinner(playerPick, computerPick);
 };
 
-console.log(player.score, computer.score);
+function showMessage(text, type) {
+	var messageEl = document.getElementById('message');
+ 
+    messageEl.innerHTML = "<h2>" + text + "</h2>";
+ 
+    switch(type) {
+        case SUCCESS: 
+			messageEl.classList.add(SUCCESS);
+		 break;
+        case DANGER:
+            messageEl.classList.add(DANGER);
+         break;
+    }
+ 
+    messageEl.style.display = "block";
+};
+
+function hideMessage() {
+    var messageEl = document.getElementById('message');
+    messageEl.style.display = "none";
+    messageEl.classList.remove(SUCCESS, DANGER);
+};
 
 function gameFinished() {
     if (player.score == 10) {
-        alert("Wygrał " + player.name + "!")
+        showMessage('Wygrał gracz ' + player.name, SUCCESS);
 		gameState = 'ended';
 		setGameElements();
     } else if (computer.score == 10) {
-        alert("Wygrał komputer!")
+        showMessage('Wygrał komputer', DANGER);
 		gameState = 'ended';
 		setGameElements();
     }
