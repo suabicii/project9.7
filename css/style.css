@@ -1,3 +1,16 @@
 .btn-default {
 	margin: 10px;
-};
+}
+
+#message {
+    text-align: center;
+    display: none;
+}
+
+#message.success {
+    color: green;
+}
+
+#message.danger {
+    color: red;
+}

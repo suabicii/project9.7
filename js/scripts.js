@@ -1,3 +1,6 @@
+var SUCCESS = 'success';
+var DANGER = 'danger';
+
 var newGameBtn = document.getElementById('js-newGameButton');
 
 newGameBtn.addEventListener('click', newGame);
@@ -50,6 +53,7 @@ function setGamePoints() {
 };
 	
 function newGame() {
+  hideMessage();
   player.name = prompt('Graczu, wpisz swoje imię', 'imię gracza');
   if (player.name) {
     player.score = computer.score = 0;
@@ -115,13 +119,38 @@ function playerPick(playerPick) {
 
 console.log(player.score, computer.score);
 
+function showMessage(text, type) {
+    var messageEl = document.getElementById('message');
+
+    messageEl.innerHTML = "<h2>" + text + "</h2>";
+
+    switch(type) {
+        case SUCCESS: 
+            messageEl.classList.add(SUCCESS);
+            break;
+        case DANGER:
+            messageEl.classList.add(DANGER);
+            break;
+    }
+
+    messageEl.style.display = "block";
+}
+
+function hideMessage() {
+    var messageEl = document.getElementById('message');
+    messageEl.style.display = "none";
+    messageEl.classList.remove(SUCCESS, DANGER);
+}
+
 function gameFinished() {
-    if (player.score == 10) {
-        alert("Wygrał " + player.name + "!")
+    if (player.score == 3) {
+        //alert("Wygrał " + player.name + "!")
+        showMessage("Wygrałeś", SUCCESS);
 		gameState = 'ended';
 		setGameElements();
-    } else if (computer.score == 10) {
-        alert("Wygrał komputer!")
+    } else if (computer.score == 3) {
+        //alert("Wygrał komputer!")
+        showMessage("Przegrałeś", DANGER);
 		gameState = 'ended';
 		setGameElements();
     }
